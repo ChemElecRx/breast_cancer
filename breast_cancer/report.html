@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Breast Cancer Prediction Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .code {
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+        .highlight {
+            background-color: #f1c40f;
+        }
+    </style>
+</head>
+<body>
+    <h1>Breast Cancer Prediction Report</h1>
+
+    <h2>Data Processing</h2>
+    <p>The dataset was loaded from a CSV file. The predictors (features) were separated from the response (labels). The first two columns were excluded from the predictors as they contain the ID and diagnosis information. The remaining columns were used as features.</p>
+    
+    <div class="code">
+        % Load dataset from CSV file<br>
+        data = readtable('data.csv');<br><br>
+        % Separate predictors (features) and response (labels)<br>
+        X = data(:, 3:end);  % Features (exclude the id and diagnosis columns)<br>
+        Y = data(:, 2);      % Labels (diagnosis column)
+    </div>
+
+    <h2>Data Splitting</h2>
+    <p>The data was split into training and testing sets using a 70-30 split. The <code>cvpartition</code> function was used to create a holdout cross-validation partition to ensure reproducibility.</p>
+    
+    <div class="code">
+        rng(1);  % For reproducibility<br>
+        cv = cvpartition(size(X, 1), 'HoldOut', 0.3);  % Create a holdout cross-validation partition<br>
+        idxTrain = cv.training;  % Logical indices for the training set<br>
+        idxTest = cv.test;       % Logical indices for the test set<br><br>
+        XTrain = X(idxTrain, :);<br>
+        YTrain = Y(idxTrain, :);<br><br>
+        XTest = X(idxTest, :);<br>
+        YTest = Y(idxTest, :);
+    </div>
+
+    <h2>Model Training</h2>
+    <p>An SVM model with a linear kernel was trained on the training set. The features were standardized before training.</p>
+    
+    <div class="code">
+        svmModel = fitcsvm(XTrain, YTrain, 'Standardize', true, 'KernelFunction', 'linear');
+    </div>
+
+    <h2>Model Prediction</h2>
+    <p>The trained SVM model was used to predict the labels for the test set.</p>
+    
+    <div class="code">
+        YTestPred = predict(svmModel, XTest);
+    </div>
+
+    <h2>Performance Evaluation</h2>
+    <p>The accuracy of the model on the test set was calculated. Additionally, a confusion matrix was created to evaluate the performance in detail.</p>
+    
+    <div class="code">
+        % Evaluate the performance of the classifier<br>
+        accuracy = sum(strcmp(YTestPred, YTestCell)) / numel(YTestCell);<br>
+        fprintf('Accuracy on test set: %4.2f%%\n', accuracy * 100);<br><br>
+        % Confusion matrix<br>
+        C = confusionmat(YTestCell, YTestPred);<br>
+        disp('Confusion Matrix:');<br>
+        disp(C);
+    </div>
+
+    <h3>Results</h3>
+    <p><strong>Accuracy on test set:</strong> 95.88%</p>
+    <p><strong>Confusion Matrix:</strong></p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Actual \ Predicted</th>
+                <th>Negative</th>
+                <th>Positive</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Negative</td>
+                <td>62</td>
+                <td class="highlight">2</td>
+            </tr>
+            <tr>
+                <td>Positive</td>
+                <td class="highlight">5</td>
+                <td>101</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>There are 7 false predictions (5 false negatives and 2 false positives) and 163 true predictions, resulting in a total of 170 test samples.</p>
+    <img src="202406140459.gif" alt="" width="736" height="480">
+</body>
+</html>
