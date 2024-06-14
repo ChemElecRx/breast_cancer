@@ -38,7 +38,7 @@ The accuracy of the model on the test set was calculated, and a confusion matrix
 - **Accuracy on test set:** 95.88%
 - **Confusion Matrix:**
 
-    | Actual \ Predicted | Positive | Negative |
+    | Actual / Predicted | Positive | Negative |
     |--------------------|----------|----------|
     | Positive           | 62       | 2        |
     | Negative           | 5        | 101      |
