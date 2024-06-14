@@ -38,12 +38,12 @@ The accuracy of the model on the test set was calculated, and a confusion matrix
 - **Accuracy on test set:** 95.88%
 - **Confusion Matrix:**
 
-    | Actual \ Predicted | Negative | Positive |
+    | Actual \ Predicted | Positive | Negative |
     |--------------------|----------|----------|
-    | Negative           | 62       | 2        |
-    | Positive           | 5        | 101      |
+    | Positive           | 62       | 2        |
+    | Negative           | 5        | 101      |
 
-There are 7 false predictions (5 false negatives and 2 false positives) and 163 true predictions, resulting in a total of 170 test samples.
+There are 7 false predictions (5 false positives and 2 false negatives) and 163 true predictions, resulting in a total of 170 test samples.
 
 ### Visualization
 
